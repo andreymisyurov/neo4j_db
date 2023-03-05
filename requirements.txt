@@ -1,0 +1,4 @@
+flask
+pandas
+neo4j
+networkx

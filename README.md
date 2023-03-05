@@ -1,18 +1,18 @@
-## project: neo4j_db
+## Project: neo4j_db
 
-## graph database test task
+## Graph database test task
 
-#### подготовливаем софт
+#### Подготовливаем софт
 - устанавливаем ipynb
 - устанавливаем neo4j и GDS из репозитория https://github.com/neo4j согласно билдим иснструкциям
 - библиотеки pandas, neo4j, networkx пакетным менеджером pip
 
-#### парсим данные из csv в neo4j
+#### Парсим данные из csv в neo4j
 - должен быть запущен neo4j на 7687 порту
 - имя файла `data_test.csv` должен лежать в одной дириктории со скриптом
 - запускаем скрипт, переходим на localhost:7474, авторизуемся, проверяем
 
-#### запросы neo4j на языке Cypher
+#### Запросы neo4j на языке Cypher
 
 Запускаем в терминале интерактивный режим Cypher Shell командой `cypher-shell`, авторизуемся
 Попросит ввести `user` и `password`<br>
@@ -34,3 +34,14 @@
 - Вывести все события в которых участвовал заданный участник:
 `MATCH (p:Participant {fio: $participant_name})-[:PARTICIPATED_IN]->(e:Event)`<br>
 `RETURN e.id_sobytiya`<br>
+
+#### Rest-API
+Для реализации этой части задания использовал фреймворк Flask.<br>
+Чтобы запустить сервер необходимо выполнить в терминале `python3 flask-rest.py`<br>
+
+Реализовано два способа отправки POST запроса.
+
+- простой UI интерфейс с возможностью ввода данных в форму<br>
+`http://127.0.0.1:5000/search`<br>
+
+- или curl-запрос из терминала со строкой для поиска `curl -X POST -H "Content-Type: text/plain" -d "Галчевская Карина Владимировна" http://localhost:5000/search`<br>
