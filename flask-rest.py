@@ -7,8 +7,8 @@ import pandas as pd
 
 app = Flask(__name__)
 
-uri = "bolt://localhost:7687"
-driver = GraphDatabase.driver(uri, auth=("neo4j", "neo4jneo4j"))
+uri = "bolt://neo4j:7687"
+driver = GraphDatabase.driver(uri, auth=("neo4j", "11111111"))
 
 
 def get_answer(fio):
@@ -27,7 +27,7 @@ def get_answer(fio):
         participant = row['p']['fio']
         event_id = row['e']['id_sobytiya']
         json_data.append({"fio": participant, "event_id": event_id})
-    json_str = json.dumps(json_data, ensure_ascii=False)
+    json_str = json.dumps(json_data, ensure_ascii=False, indent=4)
 
     return json_str
 
@@ -50,4 +50,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

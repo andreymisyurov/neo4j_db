@@ -29,13 +29,11 @@
 
 
 - Вывести всех участников, которые участвовали в событии с заданным id:
-  `MATCH (p:Participant)-[:PARTICIPATED_IN {event_id: $event_id}]->(e:Event)`<br>
-  `RETURN p.fio`<br>
+  `MATCH (p:Participant)-[:PARTICIPATED_IN {event_id: $event_id}]->(e:Event) RETURN p.fio`<br>
 
 
 - Вывести все события в которых участвовал заданный участник:
-  `MATCH (p:Participant {fio: $participant_name})-[:PARTICIPATED_IN]->(e:Event)`<br>
-  `RETURN e.id_sobytiya`<br>
+  `MATCH (p:Participant {fio: $participant_name})-[:PARTICIPATED_IN]->(e:Event) RETURN e.id_sobytiya`<br>
 
 #### Выявление и анализ сложных сообществ
 
@@ -49,7 +47,7 @@
   окрашены в синий цвет.
 - Посмотрев на визуальное представление графа заметил, что некоторые участники принимали участия во множестве встреч,
   некоторые встречались несколько раз. Также были встречи в которых участвовали 4 участника.
-![ANALISE](misc/graph.png)
+  ![ANALISE](misc/graph.png)
 
 #### Rest-API
 
@@ -63,3 +61,19 @@
 
 - или curl-запрос из терминала со строкой для поиска `curl -X POST -H "Content-Type: text/plain" -d "Галчевская Карина
   Владимировна" http://localhost:5000/search`<br>
+
+#### Контейнеризация
+
+Так как осталось немного времени решил перенести базу данных и веб-сервер в Docker-контейнеры
+
+Подтягиваем образы `docker pull neo4j` и `docker build -t flask .`<br>
+
+Для запуска базы данных в Docker контейнере необходимо выполнить:<br>
+`docker run --name neo4j --network mynetwork -p7474:7474 -p7687:7687 -v $(pwd)/data:/../data -e NEO4J_AUTH=neo4j/11111111 neo4j`<br>
+- `NEO4J_AUTH` - это данные для авторизации в neo4j<br>
+- `--network` создает сеть. чтобы подружить контейнеры нужно запустить их в одной сети<br>
+
+Далее можно запускать веб-сервер:<br>
+`docker run --network mynetwork --name server -p 5000:5000 flask`<br>
+
+Запускаем скрипт из jupyter note для парсинга базы данных и проверяем<br>
